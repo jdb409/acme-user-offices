@@ -16,8 +16,6 @@ const seed = () => {
         Office.create({ name: '68' }),
         Office.create({ name: '128' })
     ]).then(([user1, user2, office, office2]) => {
-        user1.setOffice(office2);
-        user2.setOffice(office);
     })
 }
 

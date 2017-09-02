@@ -1,6 +1,7 @@
 function renderUserForm(config) {
     const container = $(config.id);
     const template = `
+    <h3>Users</h3>
     <div class = 'well'>
         <strong>Name</strong>
         <div class = 'form-group'>

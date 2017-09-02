@@ -20,6 +20,16 @@ router.post('/', (req, res, next) => {
 
 })
 
+router.put('/:id', (req, res, next) => {
+    
+    return Promise.all([User.findById(req.params.id), Office.findById(req.body.officeId)])
+        .then(userOffice => {
+            res.send(userOffice[0]);
+            userOffice[0].setOffice(userOffice[1])
+            
+        });
+})
+
 router.delete('/:id', (req, res, next) => {
     return User.destroy({
         where: {
