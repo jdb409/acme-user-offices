@@ -38,9 +38,7 @@ $(function () {
                                 office.users =  office.users.filter(u => {
                                     return u.id * 1 !== res.user.id * 1;
                                 })
-                            })
-
-                            
+                            })                            
                             offices.forEach((office, index) => {
                                 if (office.id === obj.officeId * 1) {
                                     currentIndex = index;
@@ -74,6 +72,7 @@ $(function () {
                     }
 
                     function removeUser(obj) {
+                        
                         $.ajax({
                             url: `/users/${obj.id}`,
                             type: 'DELETE'
@@ -87,7 +86,6 @@ $(function () {
                         $.post('/offices', { add: obj.add, lat: obj.lat, lng: obj.lng })
                             .then(office => {
                                 office.users = [];
-                                // office.id = office.id - decrease;
                                 offices.push(office);
                                 console.log(offices);
                                 getOffices();
@@ -111,7 +109,7 @@ $(function () {
                                 }
 
                             })
-                            // decrease++;
+
                             getOffices();
                             getUsers();
                         });

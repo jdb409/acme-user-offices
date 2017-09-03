@@ -13,7 +13,7 @@ function renderUsers(config) {
         <br>
         <select data-userId = ${user.id} class = 'form-control'>${options.join('')}</select>
         <br/>   
-        <button class = 'btn btn-warning id='remove'>Remove</button>
+        <button class = 'btn btn-warning id='remove' data-id = ${user.id}>Remove</button>
         </li>
         `;
     });
@@ -27,6 +27,8 @@ function renderUsers(config) {
     const $html = $(template);
 
     $html.on('click', 'button', function () {
+        console.log($(this));
+    
         config.removeUser({
             id: $(this).attr('data-id')
         });

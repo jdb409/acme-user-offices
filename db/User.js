@@ -4,7 +4,6 @@ const Sequelize = db.Sequelize;
 const User = db.define('user', {
     name: {
         type: Sequelize.STRING,
-        allowNull: false,
         unique: true
     }
 });

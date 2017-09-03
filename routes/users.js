@@ -23,12 +23,9 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
     
     return Promise.all([User.findById(req.params.id), Office.findById(req.body.officeId)])
-        .then(userOffice => {
-            let prevOffice = userOffice[0].officeId;
-            console.log(prevOffice);
+        .then(userOffice => {            
             userOffice[0].setOffice(userOffice[1])
             res.send({
-                prev: prevOffice,
                 user: userOffice[0],
                 office: userOffice[1]
             });
@@ -37,6 +34,8 @@ router.put('/:id', (req, res, next) => {
 })
 
 router.delete('/:id', (req, res, next) => {
+    console.log('hello123');
+    console.log(req.params.id)
     return User.destroy({
         where: {
             id: req.params.id
