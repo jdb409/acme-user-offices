@@ -1,4 +1,4 @@
-var initAutocomplete;
+let initAutocomplete;
 
 function renderOfficeForm(config) {
     

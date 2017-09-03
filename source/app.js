@@ -1,13 +1,10 @@
-/* globals renderUsers, renderUserForm, renderOfficeForm, renderOffices */
+/* globals renderUsers, renderUserForm, renderOfficeForm, renderOffices, initAutocomplete */
 
 $(function () {
     $.get('/users')
         .then(users => {
-            let decrease = 0;
-
             $.get('/offices')
                 .then(offices => {
-                    //gets the users from db
                     function getUsers() {
                         renderUsers({
                             id: '#UsersList',
@@ -18,6 +15,7 @@ $(function () {
                         });
 
                     }
+
 
                     function getOffices() {
                         renderOffices({
@@ -35,10 +33,10 @@ $(function () {
                         }).then(res => {
                             let currentIndex;
                             offices.forEach(office => {
-                                office.users =  office.users.filter(u => {
+                                office.users = office.users.filter(u => {
                                     return u.id * 1 !== res.user.id * 1;
                                 })
-                            })                            
+                            })
                             offices.forEach((office, index) => {
                                 if (office.id === obj.officeId * 1) {
                                     currentIndex = index;
@@ -49,20 +47,6 @@ $(function () {
                         })
                     }
 
-                    getOffices();
-                    getUsers();
-                    renderUserForm({
-                        id: '#UserForm',
-                        addUser
-                    });
-
-                    renderOfficeForm({
-                        id: '#OfficeForm',
-                        addOffice
-                    });
-
-                    initAutocomplete();
-
                     function addUser(obj) {
                         $.post('/users', { name: obj.name })
                             .then(user => {
@@ -72,12 +56,20 @@ $(function () {
                     }
 
                     function removeUser(obj) {
-                        
+
                         $.ajax({
                             url: `/users/${obj.id}`,
                             type: 'DELETE'
                         }).then(() => {
                             users = users.filter(user => user.id * 1 !== obj.id * 1);
+                            offices.forEach(office => {
+                                office.users.forEach((user, index) => {
+                                    if (user.id * 1 === obj.id * 1) {
+                                        office.users.splice(index, 1);
+                                    }
+                                });
+                            });
+                            getOffices();
                             getUsers();
                         })
                     }
@@ -98,22 +90,33 @@ $(function () {
                         $.ajax({
                             url: `/offices/${obj.officeId}`,
                             type: 'DELETE'
-                        }).then((res) => {
+                        }).then(() => {
                             offices = offices.filter(office => {
                                 return office.id * 1 !== obj.officeId * 1
                             });
-
                             offices.forEach(office => {
                                 if (office.id > obj.officeId) {
                                     office.id = office.id - 1;
                                 }
-
                             })
-
                             getOffices();
                             getUsers();
                         });
                     }
+
+                    getOffices();
+                    getUsers();
+                    renderUserForm({
+                        id: '#UserForm',
+                        addUser
+                    });
+
+                    renderOfficeForm({
+                        id: '#OfficeForm',
+                        addOffice
+                    });
+
+                    initAutocomplete();
 
                 });
         });
