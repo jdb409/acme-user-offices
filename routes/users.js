@@ -24,8 +24,14 @@ router.put('/:id', (req, res, next) => {
     
     return Promise.all([User.findById(req.params.id), Office.findById(req.body.officeId)])
         .then(userOffice => {
-            res.send(userOffice[0]);
+            let prevOffice = userOffice[0].officeId;
+            console.log(prevOffice);
             userOffice[0].setOffice(userOffice[1])
+            res.send({
+                prev: prevOffice,
+                user: userOffice[0],
+                office: userOffice[1]
+            });
             
         });
 })

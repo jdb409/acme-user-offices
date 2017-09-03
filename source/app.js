@@ -3,6 +3,8 @@
 $(function () {
     $.get('/users')
         .then(users => {
+            let decrease = 0;
+
             $.get('/offices')
                 .then(offices => {
                     //gets the users from db
@@ -18,29 +20,33 @@ $(function () {
                     }
 
                     function getOffices() {
-
                         renderOffices({
                             id: '#OfficesList',
-                            offices: offices
+                            offices: offices,
+                            removeOffice
                         })
                     }
 
                     function addOfficeToUser(obj) {
                         $.ajax({
-                            url: `/users/${obj.id}`,
+                            url: `/users/${obj.userId}`,
                             type: 'PUT',
                             data: { officeId: obj.officeId }
-                        }).then((user) => {
-                            if (user.officeId !== null) {
-                                if (offices[user]) {
-                                    offices[user.officeId - 1].users.splice(0, 1);
+                        }).then(res => {
+                            let currentIndex;
+                            offices.forEach(office => {
+                                office.users =  office.users.filter(u => {
+                                    return u.id * 1 !== res.user.id * 1;
+                                })
+                            })
+
+                            
+                            offices.forEach((office, index) => {
+                                if (office.id === obj.officeId * 1) {
+                                    currentIndex = index;
                                 }
-
-                            }
-                            if (offices[obj.officeId - 1]) {
-                                offices[obj.officeId - 1].users.push(users[obj.id - 1]);
-                            }
-
+                            })
+                            offices[currentIndex].users.push(res.user);
                             getOffices();
                         })
                     }
@@ -51,6 +57,7 @@ $(function () {
                         id: '#UserForm',
                         addUser
                     });
+
                     renderOfficeForm({
                         id: '#OfficeForm',
                         addOffice
@@ -79,12 +86,35 @@ $(function () {
                     function addOffice(obj) {
                         $.post('/offices', { add: obj.add, lat: obj.lat, lng: obj.lng })
                             .then(office => {
-                                console.log(offices);
+                                office.users = [];
+                                // office.id = office.id - decrease;
                                 offices.push(office);
+                                console.log(offices);
                                 getOffices();
                                 getUsers();
                             })
 
+                    }
+
+                    function removeOffice(obj) {
+                        $.ajax({
+                            url: `/offices/${obj.officeId}`,
+                            type: 'DELETE'
+                        }).then((res) => {
+                            offices = offices.filter(office => {
+                                return office.id * 1 !== obj.officeId * 1
+                            });
+
+                            offices.forEach(office => {
+                                if (office.id > obj.officeId) {
+                                    office.id = office.id - 1;
+                                }
+
+                            })
+                            // decrease++;
+                            getOffices();
+                            getUsers();
+                        });
                     }
 
                 });

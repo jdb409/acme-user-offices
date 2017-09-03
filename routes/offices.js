@@ -7,9 +7,9 @@ router.get('/', (req, res, next) => {
             model: User
         }
     })
-    .then(offices => {
-        res.send(offices);
-    })
+        .then(offices => {
+            res.send(offices);
+        })
 })
 
 router.post('/', (req, res, next) => {
@@ -20,6 +20,17 @@ router.post('/', (req, res, next) => {
         lat: req.body.lat
     }).then(office => {
         res.send(office);
+    })
+})
+
+router.delete('/:officeId', (req, res, next) => {
+    
+    return Office.destroy({
+        where: {
+            id: req.params.officeId
+        }
+    }).then(()=>{
+        res.send('hello');
     })
 })
 

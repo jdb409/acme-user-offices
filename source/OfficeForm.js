@@ -22,6 +22,8 @@ function renderOfficeForm(config) {
 
     $html.on('change', '#autocomplete', function () {
         initAutocomplete();
+        console.log(this);
+        $(this).empty();
     });
 
     initAutocomplete  = function(){

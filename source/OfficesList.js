@@ -1,11 +1,11 @@
-function renderOffices(config){
+function renderOffices(config) {
     const container = $(config.id);
     let userLength
     const lis = config.offices.map(office => {
-        if (office.users){
+        if (office.users) {
             userLength = office.users.length
         }
-         
+
         return `
             <li class= 'list-group-item'>
                 <p>${office.name}<p>
@@ -16,13 +16,19 @@ function renderOffices(config){
             </li>
         `
     })
-    
+
     const template = `
         <ul class = 'list-group'>${lis.join('')}</ul>
     `
 
     const $html = $(template);
-    
+
+    $html.on('click', 'button', function () {
+        config.removeOffice({
+            officeId: $(this).attr('data-id')
+        });
+    })
+
     container.empty();
     container.append($html);
 
