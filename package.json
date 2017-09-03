@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "DATABASE_URL=postgres://localhost/acme_user_offices nodemon server.js "
+    "start:dev": "DATABASE_URL=postgres://localhost/acme_user_offices nodemon server.js ",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
