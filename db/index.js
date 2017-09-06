@@ -11,10 +11,10 @@ const sync = () => {
 
 const seed = () => {
     return Promise.all([
-        User.create({ name: 'Fluffy' }),
+        User.create({ name: 'Bob' }),
         User.create({ name: 'Gus' }),
-        Office.create({ name: '68' }),
-        Office.create({ name: '128' })
+        Office.create({ name: 'NYC' }),
+        Office.create({ name: 'NJ' })
     ]).then(([user1, user2, office, office2]) => {
     })
 }
